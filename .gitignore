@@ -1,0 +1,11 @@
+node_modules/
+.env
+dist/
+build/
+.DS_Store
+*.log
+.vscode/
+job-portal/node_modules/
+job-backend/node_modules/
+job-portal/.env
+job-backend/.env
