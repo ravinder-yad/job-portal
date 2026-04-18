@@ -418,21 +418,13 @@ const Navbar = () => {
                         <span className="text-sm font-black text-slate-700">My Profile</span>
                       </MenuItem>
 
-                      {user?.role === 'admin' ? (
+                      {user?.role === 'admin' && (
                         <MenuItem 
                           onClick={() => handleMenuNavigate('/admin/dashboard')} 
                           className="!rounded-xl !py-3 !px-4 hover:!bg-indigo-50 transition-all group/item"
                         >
                           <FiShield className="mr-3 text-lg text-indigo-400 group-hover/item:text-indigo-600 transition-colors" />
                           <span className="text-sm font-black text-indigo-600">Admin Terminal</span>
-                        </MenuItem>
-                      ) : (
-                        <MenuItem 
-                          onClick={() => handleMenuNavigate('/dashboard')} 
-                          className="!rounded-xl !py-3 !px-4 hover:!bg-indigo-50 transition-all group/item"
-                        >
-                          <FiPieChart className="mr-3 text-lg text-slate-400 group-hover/item:text-indigo-600 transition-colors" />
-                          <span className="text-sm font-black text-slate-700">Dashboard</span>
                         </MenuItem>
                       )}
 
@@ -543,9 +535,11 @@ const Navbar = () => {
                     <ButtonBase onClick={() => handleMenuNavigate('/profile')} className="!w-full !rounded-xl !border !border-gray-200 !py-3 !text-sm !font-semibold !text-gray-700 hover:!bg-gray-50 transition-colors flex items-center justify-center gap-2">
                       <FiUser /> My Profile
                     </ButtonBase>
-                    <ButtonBase onClick={() => handleMenuNavigate('/dashboard')} className="!w-full !rounded-xl !border !border-gray-200 !py-3 !text-sm !font-semibold !text-gray-700 hover:!bg-gray-50 transition-colors flex items-center justify-center gap-2">
-                      <FiPieChart /> Dashboard
-                    </ButtonBase>
+                    {user?.role === 'admin' && (
+                      <ButtonBase onClick={() => handleMenuNavigate('/admin/dashboard')} className="!w-full !rounded-xl !border !border-gray-200 !py-3 !text-sm !font-semibold !text-indigo-600 hover:!bg-indigo-50 transition-colors flex items-center justify-center gap-2">
+                        <FiShield /> Admin Terminal
+                      </ButtonBase>
+                    )}
                     <ButtonBase onClick={handleLogout} className="!w-full !rounded-xl !bg-red-50 !py-3 !text-sm !font-semibold !text-red-600 hover:!bg-red-100 transition-colors flex items-center justify-center gap-2">
                       <FiLogOut /> Logout
                     </ButtonBase>

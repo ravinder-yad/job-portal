@@ -20,19 +20,39 @@ import ProtectedRoute from './components/auth/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext.jsx'
 import { NotificationProvider } from './context/NotificationContext.jsx'
 import { useAuth } from './context/useAuth'
+import AdminLayout from './components/admin/AdminLayout'
+import { AdminAnalytics, AdminMessages, AdminNotifications, AdminSettings } from './components/admin/AdminPages'
+import AdminJobs from './components/admin/AdminJobs'
+import AdminCompanies from './components/admin/AdminCompanies'
+
 import './App.css'
+
+import { FullPageLoader } from './components/common/Loader'
+import { AnimatePresence } from 'framer-motion'
 
 const RoleRedirect = () => {
   const { user } = useAuth();
   if (user?.role === 'admin') return <Navigate to="/admin/dashboard" replace />;
-  return <Navigate to="/dashboard" replace />;
+  return <Navigate to="/profile" replace />;
 };
 
 function App() {
+  const [initialLoading, setInitialLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setInitialLoading(false);
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <Router>
       <AuthProvider>
         <NotificationProvider>
+          <AnimatePresence>
+             {initialLoading && <FullPageLoader />}
+          </AnimatePresence>
           <Routes>
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
@@ -43,18 +63,28 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
-          </Route>
-
-          <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
-
-          <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/applied" element={<AppliedJobs />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/notifications" element={<Notifications />} />
+            
+            {/* User Hub Routes (No Sidebar) */}
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/applied" element={<ProtectedRoute><AppliedJobs /></ProtectedRoute>} />
+            <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
             <Route path="/redirect" element={<RoleRedirect />} />               
-            <Route path="/admin/dashboard" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
           </Route>
+
+          {/* Admin Power Panel Routes (Keep Sidebar) */}
+          <Route path="/admin" element={<ProtectedRoute adminOnly><AdminLayout /></ProtectedRoute>}>
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="users" element={<AdminDashboard defaultTab="Users" />} />
+            <Route path="jobs" element={<AdminJobs />} />
+            <Route path="companies" element={<AdminCompanies />} />
+            <Route path="analytics" element={<AdminAnalytics />} />
+            <Route path="messages" element={<AdminMessages />} />
+            <Route path="notifications" element={<AdminNotifications />} />
+            <Route path="settings" element={<AdminSettings />} />
+          </Route>
+
+          {/* Legacy/Redirect Cleanup */}
+          <Route path="/dashboard" element={<RoleRedirect />} />
         </Routes>
         </NotificationProvider>
       </AuthProvider>

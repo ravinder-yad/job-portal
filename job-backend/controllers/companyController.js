@@ -1,4 +1,5 @@
 const Company = require("../models/Company");
+const { createAdminNotification } = require("./notificationController");
 
 // ✅ CREATE COMPANY
 const createCompany = async (req, res) => {
@@ -24,6 +25,13 @@ const createCompany = async (req, res) => {
         res.status(201).json({
             message: "Company created successfully",
             company,
+        });
+
+        // ✅ Notify Admin
+        await createAdminNotification({
+            content: `New company added: ${company.name}`,
+            type: "company",
+            link: "/admin/companies"
         });
     } catch (error) {
         res.status(500).json({ message: "Internal server error" });

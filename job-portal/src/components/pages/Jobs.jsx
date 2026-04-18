@@ -31,6 +31,8 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
+import { JobCardSkeleton } from '../common/SkeletonLoaders';
+import { ButtonLoader } from '../common/Loader';
 
 const Jobs = () => {
   const navigate = useNavigate();
@@ -301,9 +303,10 @@ const Jobs = () => {
           <div className="flex-1 w-full relative">
             
             {loading && jobs.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-20">
-                <CircularProgress size={40} sx={{ color: '#4f46e5' }} />
-                <p className="mt-4 text-xs font-black text-slate-400 uppercase tracking-widest animate-pulse">Scanning Opportunities...</p>
+              <div className="space-y-6">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <JobCardSkeleton key={i} />
+                ))}
               </div>
             )}
 
@@ -436,10 +439,12 @@ const Jobs = () => {
             {/* Load More Logic Placeholder */}
             {jobs.length > 0 && (
               <div className="py-16 flex flex-col items-center gap-4">
-                 <ButtonBase className="!rounded-[24px] !bg-white !border !border-slate-200 !px-12 !py-5 !font-black !uppercase !tracking-widest !text-slate-600 hover:!bg-indigo-50 hover:!text-indigo-600 hover:!border-indigo-100 transition-all shadow-sm">
-                    {loading ? <FiLoader className="animate-spin mr-2" /> : null}
+                 <ButtonLoader 
+                   loading={loading}
+                   className="!rounded-[24px] !bg-white !border !border-slate-200 !px-12 !py-5 !font-black !uppercase !tracking-widest !text-slate-600 hover:!bg-indigo-50 hover:!text-indigo-600 hover:!border-indigo-100 transition-all shadow-sm"
+                 >
                     Load More Inventory
-                 </ButtonBase>
+                 </ButtonLoader>
                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Discovery Engine Ready</p>
               </div>
             )}

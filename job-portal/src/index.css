@@ -18,3 +18,56 @@
   66% { transform: translate(-20px, 20px) scale(0.9); }
   100% { transform: translate(0px, 0px) scale(1); }
 }
+
+@keyframes top-progress {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(-30%); }
+  100% { transform: translateX(0%); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-top-progress {
+  animation: top-progress 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- Elite UI Utilities --- */
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.7) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.indigo-glow-button {
+  box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+  transition: all 0.3s ease;
+}
+
+.indigo-glow-button:hover {
+  box-shadow: 0 0 30px rgba(79, 70, 229, 0.5);
+  transform: translateY(-2px);
+}
+
+.featured-glow {
+  box-shadow: 0 0 25px rgba(234, 179, 8, 0.2);
+  border: 1px solid rgba(234, 179, 8, 0.3) !important;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

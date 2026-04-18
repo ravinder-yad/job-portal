@@ -34,4 +34,12 @@ const authorizeRoles = (...roles) => {
     };
 };
 
-module.exports = { protect, authorizeRoles };
+// 👑 Admin only middleware (Fixed email)
+const isAdmin = (req, res, next) => {
+    if (req.user.email !== "ravinderyadav092007@gmail.com") {
+        return res.status(403).json({ message: "Admin only access" });
+    }
+    next();
+};
+
+module.exports = { protect, authorizeRoles, isAdmin };

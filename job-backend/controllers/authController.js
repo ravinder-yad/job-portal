@@ -2,6 +2,7 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const { createAdminNotification } = require("./notificationController");
 
 //  REGISTER
 const register = async (req, res) => {
@@ -29,7 +30,7 @@ const register = async (req, res) => {
         });
 
         const token = jwt.sign(
-            { id: user._id, role: user.role },
+            { id: user._id, role: user.role, email: user.email },
             process.env.JWT_SECRET,
             { expiresIn: "7d" }
         );
@@ -38,6 +39,13 @@ const register = async (req, res) => {
             message: "User registered",
             token,
             user,
+        });
+
+        // ✅ Notify Admin
+        await createAdminNotification({
+            content: `New user registered: ${user.name} (${user.email})`,
+            type: "user",
+            link: "/admin/users"
         });
     } catch (error) {
         res.status(500).json({ message: "Server error" });
@@ -57,7 +65,7 @@ const login = async (req, res) => {
             return res.status(400).json({ message: "Invalid password" });
 
         const token = jwt.sign(
-            { id: user._id, role: user.role },
+            { id: user._id, role: user.role, email: user.email },
             process.env.JWT_SECRET,
             { expiresIn: "7d" }
         );

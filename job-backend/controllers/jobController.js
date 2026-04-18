@@ -1,4 +1,5 @@
 const Job = require("../models/Job");
+const { createAdminNotification } = require("./notificationController");
 
 // ✅ CREATE JOB
 const addJob = async (req, res) => {
@@ -35,6 +36,13 @@ const addJob = async (req, res) => {
     });
 
     res.status(201).json({ message: "Job created", job });
+
+    // ✅ Notify Admin
+    await createAdminNotification({
+      content: `New job posted: ${job.title}`,
+      type: "job",
+      link: "/admin/jobs"
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
@@ -133,9 +141,9 @@ const updateJob = async (req, res) => {
 
     if (!job) return res.status(404).json({ message: "Job not found" });
 
-    // 🔐 only owner can update
-    if (job.postedBy.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Unauthorized" });
+    // 🔐 only owner or admin can update
+    if (job.postedBy.toString() !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({ message: "Unauthorized. You are not the owner or an admin." });
     }
 
     const updated = await Job.findByIdAndUpdate(req.params.id, req.body, {
@@ -155,8 +163,9 @@ const deleteJob = async (req, res) => {
 
     if (!job) return res.status(404).json({ message: "Job not found" });
 
-    if (job.postedBy.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Unauthorized" });
+    // 🔐 only owner or admin can delete
+    if (job.postedBy.toString() !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({ message: "Unauthorized. You are not the owner or an admin." });
     }
 
     await job.deleteOne();
