@@ -6,7 +6,7 @@ import { Skeleton, Box, Card, Stack } from '@mui/material';
  */
 export const JobCardSkeleton = () => (
   <Card className="p-4 mb-4 border border-gray-100 shadow-sm rounded-xl">
-    <Stack direction="row" spacing={2} alignItems="center">
+    <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
       <Skeleton variant="rounded" width={48} height={48} className="rounded-lg" />
       <Box sx={{ flexGrow: 1 }}>
         <Skeleton variant="text" width="60%" height={24} />
@@ -47,7 +47,7 @@ export const DashboardSkeleton = () => (
       <Skeleton variant="text" width="30%" height={32} className="mb-4" />
       <Stack spacing={3}>
         {[1, 2, 3, 4].map((i) => (
-          <Stack key={i} direction="row" spacing={2} alignItems="center">
+          <Stack key={i} direction="row" spacing={2} sx={{ alignItems: 'center' }}>
             <Skeleton variant="circular" width={48} height={48} />
             <Box sx={{ flexGrow: 1 }}>
               <Skeleton variant="text" width="50%" />

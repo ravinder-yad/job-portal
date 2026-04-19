@@ -12,6 +12,18 @@ const applicationSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    fullName: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+    },
     resume: {
       type: String, // URL to resume
       required: true,

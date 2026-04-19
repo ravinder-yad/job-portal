@@ -12,6 +12,7 @@ import { useAuth } from '../../context/useAuth';
 import { useNotifications } from '../../context/NotificationContext';
 import { notificationStyles } from '../../data/notifications';
 import { mockChats, getUnreadCount } from '../../data/messages';
+import { getAssetUrl } from '../../utils/assets';
 
 const NAV_LINKS = [
   { name: 'Home', path: '/', icon: <FiHome className="md:hidden mr-3" /> },
@@ -28,6 +29,17 @@ const Navbar = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [messagesOpen, setMessagesOpen] = useState(false);
+  const [navKeyword, setNavKeyword] = useState('');
+  const [navLocation, setNavLocation] = useState('');
+
+  const handleNavSearch = (e) => {
+    if (e.key === 'Enter' || e.type === 'click') {
+      const params = new URLSearchParams();
+      if (navKeyword) params.append('keyword', navKeyword);
+      if (navLocation) params.append('location', navLocation);
+      navigate(`/jobs?${params.toString()}`);
+    }
+  };
 
   const { notifications, unreadCount, markAsRead } = useNotifications();
   const recentNotifications = notifications.slice(0, 3);
@@ -125,8 +137,11 @@ const Navbar = () => {
                 <FiSearch className="text-gray-400 mr-3 text-lg" />
                 <input
                   type="text"
+                  value={navKeyword}
+                  onChange={(e) => setNavKeyword(e.target.value)}
+                  onKeyDown={handleNavSearch}
                   placeholder="Search jobs, skills, companies..."
-                  className="w-full bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400"
+                  className="w-full bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 font-medium"
                   onFocus={() => setIsFocused(true)}
                   onBlur={() => setIsFocused(false)}
                 />
@@ -140,8 +155,11 @@ const Navbar = () => {
                 <FiMapPin className="text-gray-400 mr-3 text-lg" />
                 <input
                   type="text"
+                  value={navLocation}
+                  onChange={(e) => setNavLocation(e.target.value)}
+                  onKeyDown={handleNavSearch}
                   placeholder="Location..."
-                  className="w-full bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400"
+                  className="w-full bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 font-medium"
                   onFocus={() => setIsFocused(true)}
                   onBlur={() => setIsFocused(false)}
                 />
@@ -150,6 +168,7 @@ const Navbar = () => {
               {/* Search Button */}
               <div className="p-1.5">
                 <ButtonBase
+                  onClick={handleNavSearch}
                   className="!rounded-full !bg-gradient-to-r !from-indigo-600 !to-purple-600 !text-white !h-10 !px-6 !text-sm !font-semibold !transition-all hover:!scale-[1.05] hover:!shadow-lg hover:!shadow-indigo-500/40 focus:!ring-2 focus:!ring-indigo-500 focus:!ring-offset-2"
                 >
                   Search
@@ -346,12 +365,12 @@ const Navbar = () => {
                     className="flex items-center gap-2 cursor-pointer rounded-full hover:bg-slate-50 pr-4 transition-colors border border-transparent hover:border-slate-100"
                     onClick={handleProfileClick}
                   >
-                    <IconButton 
-                      className="!p-0 pointer-events-none"
-                      sx={{ color: '#4f46e5' }}
+                    <Avatar 
+                      src={getAssetUrl(user?.profileImage)} 
+                      sx={{ width: 38, height: 38, bgcolor: '#4f46e5', fontWeight: 800, fontSize: '14px' }}
                     >
-                      <MdAccountCircle style={{ fontSize: '38px' }} />
-                    </IconButton>
+                      {avatarLetter}
+                    </Avatar>
                     <span className="text-sm font-black text-slate-700 hidden sm:block select-none pointer-events-none">
                       {userName || 'User'}
                     </span>
@@ -394,7 +413,10 @@ const Navbar = () => {
                     }}
                   >
                     <div className="px-4 py-5 border-b border-slate-50 mb-2 flex items-center gap-4">
-                       <Avatar sx={{ width: 44, height: 44, bgcolor: '#4f46e5', fontWeight: 900, borderRadius: '12px', fontSize: '18px' }}>
+                       <Avatar 
+                         src={getAssetUrl(user?.profileImage)}
+                         sx={{ width: 44, height: 44, bgcolor: '#4f46e5', fontWeight: 900, borderRadius: '12px', fontSize: '18px' }}
+                       >
                           {avatarLetter}
                        </Avatar>
                        <div className="min-w-0">
@@ -524,7 +546,10 @@ const Navbar = () => {
                 ) : (
                   <div className="flex flex-col gap-3">
                     <div className="flex items-center gap-3 rounded-xl bg-slate-50 p-3">
-                      <Avatar sx={{ width: 40, height: 40, bgcolor: '#4f46e5', fontWeight: 800 }}>
+                      <Avatar 
+                        src={getAssetUrl(user?.profileImage)}
+                        sx={{ width: 40, height: 40, bgcolor: '#4f46e5', fontWeight: 800 }}
+                      >
                         {avatarLetter}
                       </Avatar>
                       <div className="min-w-0">

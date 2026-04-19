@@ -13,7 +13,7 @@ const CompanyCard = ({ company }) => {
       initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
-      // onClick={() => navigate(`/companies/${company.id}`)}
+      onClick={() => navigate(`/companies/${company._id || company.id}`)}
       className="bg-white rounded-2xl p-6 border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(79,70,229,0.1)] hover:-translate-y-1 transition-all duration-300 group cursor-pointer flex flex-col h-full relative"
     >
       {/* Top badges */}
@@ -28,7 +28,15 @@ const CompanyCard = ({ company }) => {
       {/* Header Info */}
       <div className="flex items-start gap-4 mb-4 mt-2">
         <div className="w-16 h-16 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center p-3 shrink-0 group-hover:scale-105 transition-transform">
-          <img src={company.logo} alt={company.name} className="w-full h-full object-contain" />
+          <img 
+            src={company.logo} 
+            alt={company.name} 
+            className="w-full h-full object-contain"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = 'https://via.placeholder.com/100?text=Logo';
+            }}
+          />
         </div>
         <div>
           <h3 className="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">{company.name}</h3>

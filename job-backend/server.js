@@ -19,6 +19,7 @@ const io = new Server(server, {
 // middleware
 app.use(cors());
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
 
 // DB
 connectDb();
@@ -51,6 +52,7 @@ app.use("/api/messages", require("./routes/messageRoutes"));
 app.use("/api/notifications", require("./routes/notificationRoutes"));
 app.use("/api/settings", require("./routes/settingRoutes"));
 app.use("/api/applications", require("./routes/applicationRoutes"));
+app.use("/api/user", require("./routes/userRoutes"));
 
 const port = process.env.PORT || 3005;
 

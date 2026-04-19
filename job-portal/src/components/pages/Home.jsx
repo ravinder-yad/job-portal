@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiSearch, FiMapPin, FiBriefcase, FiCode, FiTrendingUp } from 'react-icons/fi';
 import { ButtonBase, Avatar, AvatarGroup } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 // Import new sections
 import FeaturedJobs from '../home/FeaturedJobs';
@@ -10,7 +11,21 @@ import HowItWorks from '../home/HowItWorks';
 import CTASection from '../home/CTASection';
 
 const Home = () => {
+  const navigate = useNavigate();
   const [isFocused, setIsFocused] = useState(false);
+  const [keyword, setKeyword] = useState('');
+  const [location, setLocation] = useState('');
+
+  const handleSearch = () => {
+    const params = new URLSearchParams();
+    if (keyword) params.append('keyword', keyword);
+    if (location) params.append('location', location);
+    navigate(`/jobs?${params.toString()}`);
+  };
+
+  const handleTagClick = (tag) => {
+    navigate(`/jobs?keyword=${tag}`);
+  };
 
   return (
     <>
@@ -49,13 +64,18 @@ const Home = () => {
             </p>
 
             {/* Search Box */}
-            <div className={`bg-white p-2 rounded-[2rem] border transition-all duration-300 flex flex-col sm:flex-row items-center gap-2 max-w-3xl mx-auto lg:mx-0 relative z-20 ${isFocused ? 'shadow-[0_8px_30px_rgb(79,70,229,0.15)] border-indigo-200' : 'shadow-[0_8px_30px_rgb(0,0,0,0.06)] border-gray-100'}`}>
+            <form 
+              onSubmit={(e) => { e.preventDefault(); handleSearch(); }}
+              className={`bg-white p-2 rounded-[2rem] border transition-all duration-300 flex flex-col sm:flex-row items-center gap-2 max-w-3xl mx-auto lg:mx-0 relative z-20 ${isFocused ? 'shadow-[0_8px_30px_rgb(79,70,229,0.15)] border-indigo-200' : 'shadow-[0_8px_30px_rgb(0,0,0,0.06)] border-gray-100'}`}
+            >
               <div className="flex items-center flex-1 w-full pl-4 h-12">
                  <FiSearch className="text-gray-400 mr-3 text-lg" />
                  <input 
                    type="text" 
+                   value={keyword}
+                   onChange={(e) => setKeyword(e.target.value)}
                    placeholder="Job title, skills, or company" 
-                   className="w-full bg-transparent outline-none text-gray-700 placeholder:text-gray-400"
+                   className="w-full bg-transparent outline-none text-gray-700 placeholder:text-gray-400 font-medium"
                    onFocus={() => setIsFocused(true)}
                    onBlur={() => setIsFocused(false)} 
                  />
@@ -65,22 +85,31 @@ const Home = () => {
                  <FiMapPin className="text-gray-400 mr-3 text-lg" />
                  <input 
                    type="text" 
+                   value={location}
+                   onChange={(e) => setLocation(e.target.value)}
                    placeholder="Location or 'Remote'" 
-                   className="w-full bg-transparent outline-none text-gray-700 placeholder:text-gray-400"
+                   className="w-full bg-transparent outline-none text-gray-700 placeholder:text-gray-400 font-medium"
                    onFocus={() => setIsFocused(true)}
                    onBlur={() => setIsFocused(false)} 
                  />
               </div>
-              <ButtonBase className="!w-full sm:!w-auto !rounded-full !bg-gradient-to-r !from-indigo-600 !to-purple-600 !text-white !h-12 !px-8 !font-semibold hover:!scale-[1.02] hover:!shadow-lg hover:!shadow-indigo-500/40 transition-all !mt-2 sm:!mt-0 focus:!outline-none focus:!ring-2 focus:!ring-offset-2 focus:!ring-indigo-500">
+              <ButtonBase 
+                type="submit"
+                className="!w-full sm:!w-auto !rounded-full !bg-gradient-to-r !from-indigo-600 !to-purple-600 !text-white !h-12 !px-8 !font-black !uppercase !tracking-widest hover:!scale-[1.02] hover:!shadow-lg hover:!shadow-indigo-500/40 transition-all !mt-2 sm:!mt-0 focus:!outline-none"
+              >
                  Find Jobs
               </ButtonBase>
-            </div>
+            </form>
 
             {/* Popular Tags */}
             <div className="mt-6 flex flex-wrap items-center justify-center lg:justify-start gap-2 text-sm text-gray-500">
-              <span className="font-medium mr-2 text-gray-600">Trending:</span>
+              <span className="font-black mr-2 text-slate-400 uppercase tracking-widest text-[10px]">Trending:</span>
               {['React', 'Remote', 'UI/UX Designer', 'Fresher', 'Python'].map(tag => (
-                <span key={tag} className="px-3 py-1 bg-gray-50/80 hover:bg-white hover:text-indigo-600 border border-gray-200 rounded-full cursor-pointer transition-all hover:shadow-sm">
+                <span 
+                  key={tag} 
+                  onClick={() => handleTagClick(tag)}
+                  className="px-4 py-1.5 bg-slate-50 hover:bg-indigo-600 hover:text-white border border-slate-100 rounded-full cursor-pointer transition-all hover:shadow-md font-bold text-[11px] uppercase tracking-tight text-slate-500"
+                >
                   {tag}
                 </span>
               ))}
@@ -104,8 +133,11 @@ const Home = () => {
                
                {/* Secondary CTA */}
                <div className="sm:ml-auto lg:ml-8 w-full sm:w-auto">
-                 <ButtonBase className="!w-full sm:!w-auto !rounded-xl !border-2 !border-gray-200 !text-gray-700 !px-6 !py-3 !font-semibold hover:!border-indigo-600 hover:!text-indigo-700 hover:!bg-indigo-50/50 transition-all">
-                   Upload Resume
+                 <ButtonBase 
+                   onClick={() => navigate('/profile')}
+                   className="!w-full sm:!w-auto !rounded-2xl !bg-slate-900 !text-white !px-8 !py-4 !font-black !uppercase !tracking-widest hover:!bg-indigo-600 transition-all shadow-xl"
+                 >
+                   Update CV Recon
                  </ButtonBase>
                </div>
             </div>

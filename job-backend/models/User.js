@@ -7,7 +7,6 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-
     email: {
       type: String,
       required: true,
@@ -15,56 +14,44 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
-
     password: {
       type: String,
       required: true,
       minlength: 6,
     },
-
     role: {
       type: String,
       enum: ["user", "admin"],
       default: "user",
     },
+    
+    // 🔥 New Profile Fields
+    profileImage: { type: String, default: "" },
+    resume: { type: String, default: "" },
+    resumeName: { type: String, default: "" },
+    phone: { type: String, default: "" },
+    bio: { type: String, default: "" },
+    location: { type: String, default: "" },
+    
+    skills: [{ type: String }],
+    
+    experience: [
+      {
+        company: { type: String },
+        role: { type: String },
+        duration: { type: String }, // e.g., "Jan 2022 - Present"
+        description: { type: String },
+      }
+    ],
 
     isVerified: {
       type: Boolean,
       default: false,
     },
-
-    otp: {
-      type: String,
-    },
-
-    otpExpiry: {
-      type: Date,
-    },
-
-    resetPasswordToken: {
-      type: String,
-    },
-
-    resetPasswordExpire: {
-      type: Date,
-    },
-    
-    skills: [
-      {
-        type: String,
-      },
-    ],
-    
-    experience: {
-      type: String,
-      enum: ["Fresher", "1-3 years", "3-5 years", "5+ years"],
-      default: "Fresher",
-    },
-    
-    location: {
-      type: String,
-      trim: true,
-    },
+    otp: { type: String },
+    otpExpiry: { type: Date },
+    resetPasswordToken: { type: String },
+    resetPasswordExpire: { type: Date },
   },
   {
     timestamps: true,

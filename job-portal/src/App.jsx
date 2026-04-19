@@ -5,6 +5,7 @@ import DashboardLayout from './components/layout/DashboardLayout'
 import Home from './components/pages/Home'
 import JobDetails from './components/pages/JobDetails'
 import Companies from './components/pages/Companies'
+import CompanyDetail from './components/pages/CompanyDetail'
 import AdminDashboard from './components/pages/AdminDashboard'
 import Dashboard from './components/pages/Dashboard'
 import AppliedJobs from './components/pages/AppliedJobs'
@@ -24,6 +25,8 @@ import AdminLayout from './components/admin/AdminLayout'
 import { AdminAnalytics, AdminMessages, AdminNotifications, AdminSettings } from './components/admin/AdminPages'
 import AdminJobs from './components/admin/AdminJobs'
 import AdminCompanies from './components/admin/AdminCompanies'
+import AdminApplications from './components/admin/AdminApplications'
+import AdminUserPulse from './components/admin/AdminUserPulse'
 
 import './App.css'
 
@@ -59,6 +62,7 @@ function App() {
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/jobs/:id" element={<JobDetails />} />
             <Route path="/companies" element={<Companies />} />
+            <Route path="/companies/:id" element={<CompanyDetail />} />
             <Route path="/saved" element={<SavedJobs />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
@@ -80,6 +84,8 @@ function App() {
             <Route path="analytics" element={<AdminAnalytics />} />
             <Route path="messages" element={<AdminMessages />} />
             <Route path="notifications" element={<AdminNotifications />} />
+            <Route path="applications" element={<AdminApplications />} />
+            <Route path="users/:userId" element={<AdminUserPulse />} />
             <Route path="settings" element={<AdminSettings />} />
           </Route>
 

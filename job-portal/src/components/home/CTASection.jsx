@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ButtonBase } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const CTASection = () => {
+  const navigate = useNavigate();
   return (
     <section className="py-24 relative overflow-hidden">
       {/* Background */}
@@ -38,10 +40,16 @@ const CTASection = () => {
           transition={{ delay: 0.2 }}
           className="flex flex-col sm:flex-row justify-center items-center gap-4"
         >
-          <ButtonBase className="!w-full sm:!w-auto !rounded-full !bg-white !text-indigo-900 !px-8 !py-4 !text-lg !font-bold hover:!scale-105 hover:!shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all">
+          <ButtonBase 
+            onClick={() => navigate('/jobs')}
+            className="!w-full sm:!w-auto !rounded-full !bg-white !text-indigo-900 !px-8 !py-4 !text-lg !font-bold hover:!scale-105 hover:!shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all"
+          >
             Find Jobs Now
           </ButtonBase>
-          <ButtonBase className="!w-full sm:!w-auto !rounded-full border-2 !border-white/20 !text-white !px-8 !py-4 !text-lg !font-bold hover:!bg-white/10 hover:!border-white/30 transition-all">
+          <ButtonBase 
+            onClick={() => navigate('/profile')}
+            className="!w-full sm:!w-auto !rounded-full border-2 !border-white/20 !text-white !px-8 !py-4 !text-lg !font-bold hover:!bg-white/10 hover:!border-white/30 transition-all"
+          >
             Upload Your Resume
           </ButtonBase>
         </motion.div>

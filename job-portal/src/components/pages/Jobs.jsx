@@ -29,7 +29,7 @@ import {
   Drawer,
   CircularProgress
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
 import { JobCardSkeleton } from '../common/SkeletonLoaders';
 import { ButtonLoader } from '../common/Loader';
@@ -38,17 +38,19 @@ const Jobs = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   
-  // States
+  const [searchParams] = useSearchParams();
+  
+  // Data States
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isSearchSticky, setIsSearchSticky] = useState(false);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   
-  // Filter States
-  const [keyword, setKeyword] = useState('');
-  const [location, setLocation] = useState('');
-  const [salaryRange, setSalaryRange] = useState([0, 2000000]); // 0 - 20L
+  // Filter States (initialized from URL if available)
+  const [keyword, setKeyword] = useState(searchParams.get('keyword') || '');
+  const [location, setLocation] = useState(searchParams.get('location') || '');
+  const [salaryRange, setSalaryRange] = useState([0, 2000000]); 
   const [selectedType, setSelectedType] = useState('All');
   const [experience, setExperience] = useState('All');
   const [sortBy, setSortBy] = useState('latest');
@@ -345,7 +347,15 @@ const Jobs = () => {
                          {/* Logo Section */}
                         <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center p-3 group-hover:scale-105 transition-transform duration-500 shadow-sm shrink-0">
                           {job.company?.logo ? (
-                            <img src={job.company.logo} alt={job.company.name} className="w-full h-full object-contain" />
+                            <img 
+                              src={job.company.logo} 
+                              alt={job.company.name} 
+                              className="w-full h-full object-contain"
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = 'https://via.placeholder.com/100?text=Logo';
+                              }}
+                            />
                           ) : (
                             <FiBriefcase className="text-slate-300 text-2xl" />
                           )}
